@@ -6,6 +6,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions, ObjectLiteral, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { USERNOTFOUND } from './user.const';
 import { UserORM } from './user.entity';
 
@@ -33,5 +34,11 @@ export class UserService {
 
   async create(args: CreateUserDto) {
     return this.userRepository.save(this.userRepository.create({ ...args }));
+  }
+
+  async update(id: number, args: UpdateUserDto) {
+    const user = await this.findOne({ id });
+    Object.assign(user, args);
+    return this.userRepository.save(user);
   }
 }
