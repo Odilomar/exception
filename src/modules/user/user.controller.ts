@@ -8,8 +8,11 @@ import {
   ParseIntPipe,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FindUserReturnDto } from './dto/find-user-return.dto';
+import { FindUserDto } from './dto/find-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserORM } from './user.entity';
 import { UserService } from './user.service';
@@ -19,8 +22,8 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async find(): Promise<UserORM[]> {
-    return this.userService.find({});
+  async find(@Query() args: FindUserDto): Promise<FindUserReturnDto> {
+    return this.userService.find(args);
   }
 
   @Get('/:id')

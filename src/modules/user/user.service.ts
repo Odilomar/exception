@@ -6,6 +6,8 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions, ObjectLiteral, Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FindUserReturnDto } from './dto/find-user-return.dto';
+import { FindUserDto } from './dto/find-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { USERNOTFOUND } from './user.const';
 import { UserORM } from './user.entity';
@@ -22,8 +24,19 @@ export class UserService {
     private readonly userRepository: Repository<UserORM>,
   ) {}
 
-  async find(where?: WhereFind<UserORM>) {
-    return this.userRepository.find({ where });
+  async find({ take, skip, ...where }: FindUserDto) {
+    const [data, total] = await this.userRepository.findAndCount({
+      where,
+      take,
+      skip,
+    });
+
+    return {
+      data,
+      total,
+      take,
+      skip,
+    } as FindUserReturnDto;
   }
 
   async findOne(where?: WhereFind<UserORM>) {
