@@ -15,7 +15,7 @@ export class UserORM {
   name: string;
 
   @Column()
-  age: string;
+  age: number;
 
   @Column()
   job: string;
