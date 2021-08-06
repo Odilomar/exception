@@ -1,6 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { FindConditions, ObjectLiteral, Repository } from 'typeorm';
+import { USERNOTFOUND } from './user.const';
 import { UserORM } from './user.entity';
 
 type WhereFind<T> =
@@ -20,6 +25,8 @@ export class UserService {
   }
 
   async findOne(where?: WhereFind<UserORM>) {
-    return this.userRepository.findOneOrFail({ where });
+    const user = await this.userRepository.findOne({ where });
+    if (!user) throw new NotFoundException(USERNOTFOUND);
+    return user;
   }
 }
