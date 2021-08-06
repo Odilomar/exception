@@ -41,4 +41,9 @@ export class UserService {
     Object.assign(user, args);
     return this.userRepository.save(user);
   }
+
+  async delete(id: number) {
+    await this.findOne({ id });
+    await this.userRepository.delete({ id });
+  }
 }

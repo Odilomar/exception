@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   Param,
@@ -34,7 +35,16 @@ export class UserController {
 
   @Put('/:id')
   @HttpCode(201)
-  async update(@Param('id') id: number, @Body() args: UpdateUserDto) {
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() args: UpdateUserDto,
+  ) {
     return this.userService.update(id, args);
+  }
+
+  @Delete('/:id')
+  @HttpCode(204)
+  async delete(@Param('id', ParseIntPipe) id: number) {
+    return this.userService.delete(id);
   }
 }
